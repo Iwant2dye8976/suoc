@@ -1,10 +1,12 @@
 <?php
 require_once APP_ROOT."/app/services/NewsService.php";
+require_once APP_ROOT."/app/services/CategoryService.php";
     class NewsController {
         public function index(){
             $ns = new NewsService();
+            $cs = new CategoryService();
             $news = $ns->getAllNews();
-            $categories = $ns->getAllCategories();
+            $categories = $cs->getAllCategories();
             include APP_ROOT."/app/views/home/index.php";
         }
 
@@ -19,7 +21,8 @@ require_once APP_ROOT."/app/services/NewsService.php";
         public function category(){
             if(isset($_GET['category_id'])){
                 $ns = new NewsService();
-                $categories = $ns->getAllCategories();
+                $cs = new CategoryService();
+                $categories = $cs->getAllCategories();
                 $news = $ns->getByCategory($_GET['category_id']);
                 include APP_ROOT."/app/views/home/index.php";
             }
