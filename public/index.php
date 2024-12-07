@@ -17,6 +17,10 @@ switch ($controller){
         require_once APP_ROOT."/app/controllers/AuthController.php";
         $controllerObj = new AuthController();
         break;
+    case 'admin':
+        require_once APP_ROOT."/app/controllers/AdminController.php";
+        $controllerObj = new AdminController();
+        break;
 }
 
 if (method_exists($controllerObj, $action)) {

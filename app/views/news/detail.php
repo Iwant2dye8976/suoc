@@ -13,7 +13,7 @@
 
         <!-- Ảnh bài báo -->
         <div class="text-center mb-4">
-            <img src="<?= htmlspecialchars($detail->getImage()) ?>" alt="Ảnh bài báo" class="img-fluid rounded" style="max-height: 400px;">
+            <img src="<?= PATH.htmlspecialchars($detail->getImage()) ?>" alt="Ảnh bài báo" class="img-fluid rounded" style="max-height: 400px;">
         </div>
 
         <!-- Nội dung bài báo -->

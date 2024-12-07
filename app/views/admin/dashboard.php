@@ -7,51 +7,38 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <title>Admin Dashboard</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Tùy chỉnh kích thước các cột trong bảng */
+        .table td, .table th {
+            vertical-align: middle;
         }
-        .sidebar {
-            height: 100vh;
-            width: 250px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #343a40;
-            padding-top: 20px;
+        .table img {
+            width: 100px;
+            height: auto;
         }
-        .sidebar a {
-            text-decoration: none;
-            color: white;
-            padding: 15px 20px;
-            display: block;
-            font-size: 16px;
+        .table td:nth-child(1), .table th:nth-child(1) {
+            width: 50px; /* Cột # */
         }
-        .sidebar a:hover {
-            background-color: #495057;
+        .table td:nth-child(2), .table th:nth-child(2) {
+            width: 200px; /* Cột Title */
         }
-        .content {
-            margin-left: 260px;
-            padding: 20px;
+        .table td:nth-child(3), .table th:nth-child(3) {
+            width: 250px; /* Cột Content */
         }
-        .navbar {
-            margin-left: 250px;
-            position: fixed;
-            width: calc(100% - 250px);
-            z-index: 1000;
+        .table td:nth-child(4), .table th:nth-child(4) {
+            width: 150px; /* Cột Image */
+        }
+        .table td:nth-child(5), .table th:nth-child(5) {
+            width: 150px; /* Cột Date */
+        }
+        .table td:nth-child(6), .table th:nth-child(6) {
+            width: 100px; /* Cột Category Id */
+        }
+        .table td:nth-child(7), .table th:nth-child(7) {
+            width: 150px; /* Cột Actions */
         }
     </style>
 </head>
-<body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h4 class="text-white text-center mb-4">Admin Panel</h4>
-        <a href="#"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="#"><i class="fas fa-newspaper"></i> Manage News</a>
-        <a href="#"><i class="fas fa-folder"></i> Categories</a>
-        <a href="#"><i class="fas fa-users"></i> Users</a>
-        <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
-    </div>
-
+<body>  
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
         <div class="container-fluid">
@@ -68,7 +55,7 @@
                 <div class="card text-white bg-primary mb-3">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fas fa-newspaper"></i> Total News</h5>
-                        <p class="card-text">150</p>
+                        <p class="card-text"><?= $n->getNewsCount()?></p>
                     </div>
                 </div>
             </div>
@@ -76,7 +63,7 @@
                 <div class="card text-white bg-success mb-3">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fas fa-users"></i> Total Users</h5>
-                        <p class="card-text">45</p>
+                        <p class="card-text"><?= $n->getUserCount();?></p>
                     </div>
                 </div>
             </div>
@@ -84,12 +71,15 @@
                 <div class="card text-white bg-warning mb-3">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fas fa-folder"></i> Total Categories</h5>
-                        <p class="card-text">12</p>
+                        <p class="card-text"><?= $n->getCategoryCount();?></p>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div>
+            <a href="?controller=admin&action=add" class="btn btn-success">Add news</a>
+        </div>
         <!-- Example Table -->
         <h2 class="mt-5">Latest News</h2>
         <table class="table table-striped">
@@ -97,32 +87,32 @@
                 <tr>
                     <th>#</th>
                     <th>Title</th>
-                    <th>Category</th>
+                    <th>Content</th>
+                    <th>Image</th>
                     <th>Date</th>
+                    <th>Category Id</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+            <?php foreach($news as $item){?>
                 <tr>
-                    <td>1</td>
-                    <td>News Title 1</td>
-                    <td>Category 1</td>
-                    <td>2024-12-01</td>
+                    <td><?=$item->getID()?></td>
+                    <td><?=$item->getTitle()?></td>
+                    <td><?=$item->getContent()?></td>
                     <td>
-                        <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Edit</a>
-                        <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</a>
+                        <div class="d-flex justify-content-center">
+                            <img src="<?= PATH.$item->getImage();?>" style="height:120px;width:120px;">
+                        </div>
+                    </td>
+                    <td><?=$item->getCreated_at()?></td>
+                    <td><?=$item->getCategory_id()?></td>
+                    <td>
+                        <a href="?controller=admin&action=edit&id=<?= $item->getID()?>" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                        <a href="?controller=admin&action=delete&id=<?= $item->getID()?>" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</a>
                     </td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>News Title 2</td>
-                    <td>Category 2</td>
-                    <td>2024-12-02</td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Edit</a>
-                        <a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Delete</a>
-                    </td>
-                </tr>
+            <?php }; ?>
             </tbody>
         </table>
     </div>

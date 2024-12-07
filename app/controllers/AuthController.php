@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once APP_ROOT . "/app/services/UserService.php";
+require_once APP_ROOT."/app/services/NewsService.php";
 
 class AuthController {
     public function index() {
@@ -23,10 +24,11 @@ class AuthController {
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['role'] = $user['role'];
-
+                $n = new NewsService();
+                $news = $n->getAllNews();
                 // Điều hướng dựa trên vai trò
                 if ($user['role'] === 0) {
-                    include APP_ROOT."/app/views/admin/dashboard.php";
+                    header("Location: ?controller=admin&action=dashboard");
                 } else {
                     include APP_ROOT."/app/views/home/index.php";
                 }

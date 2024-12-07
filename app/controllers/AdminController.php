@@ -1,35 +1,61 @@
 <?php
-require_once APP_ROOT."/app/services/UserService.php";
-require_once 'config/database.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $user = new UserService();
-    $user->getUser($username,$password);
-
-    if ($user && password_verify($password, $user['password'])) {
-        // Nếu đăng nhập thành công, kiểm tra quyền hạn
-        session_start();  // Bắt đầu session
-
-        // Lưu thông tin người dùng vào session
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role']; // Lưu vai trò (admin hoặc user)
-
-        // Chuyển hướng tới trang phù hợp dựa trên vai trò
-        if ($user['role'] === 1) {
-            header('Location: ../views/admin/dashboard.php'); // Trang quản trị cho admin
-        } else {
-            header('Location: user_dashboard.php'); // Trang cho người dùng
-        }
-        exit();
-    } else {
-        echo "Tên đăng nhập hoặc mật khẩu không đúng.";
-    }
-}
+require_once APP_ROOT."/app/services/AdminService.php";
+require_once APP_ROOT."/app/services/NewsService.php";
+// require_once APP_ROOT."/app/config/database.php";
 
 class AdminController {
+    public function dashboard(){
+        $n = new NewsService();
+        $news = $n->getAllNews();
+        include APP_ROOT."/app/views/admin/dashboard.php";
+    }
+
+    public function add(){
+        $n = new NewsService();
+        $categories = $n->getAllCategories();
+        include APP_ROOT."/app/views/admin/news/add.php";
+    }
+
+    public function edit(){
+        $n = new NewsService();
+        $id = $_GET['id'];
+        $news = $n->getById($id);
+        $categories = $n->getAllCategories();
+        include APP_ROOT."/app/views/admin/news/edit.php";
+    }
+
+    public function delete(){
+        $id = $_GET['id'];
+        $as =  new AdminService();
+        $as->deleteNews($id);
+        header("Location: ?controller=admin&action=dashboard");
+    }
+
+    public function create(){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $as = new AdminService();
+            $title = $_POST['title'];
+            $content = $_POST['content'];
+            $image = "/".$_FILES['image']['name'];
+            $created_at = $_POST['created_at'];
+            $category_id = $_POST['category_id'];
+            $as->addNews($title,$content,$image,$created_at,$category_id);
+            header("Location: ?controller=admin&action=dashboard");
+        }
+    }
+
+    public function update(){
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $as = new AdminService();
+            $id = $_POST['id'];
+            $title = $_POST['title'];
+            $content = $_POST['content'];
+            $image = "/".$_FILES['image']['name'];
+            $created_at = $_POST['created_at'];
+            $category_id = $_POST['category_id'];
+            $as->editNews($id,$title,$content,$image,$created_at,$category_id);
+            header("Location: ?controller=admin&action=dashboard");
+        }
+    }
 }
 ?>
