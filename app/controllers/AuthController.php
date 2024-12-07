@@ -46,7 +46,7 @@ class AuthController {
         // Hủy session và chuyển hướng
         session_unset();
         session_destroy();
-        header('Location: /admin/login.php');
+        header('Location: ?controller=auth&action=index');
         exit();
     }
 }
