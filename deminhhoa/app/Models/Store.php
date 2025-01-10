@@ -14,4 +14,7 @@ class Store extends Model
         'phone',
         'price'
     ];
+    /*public function product(){ //Sử dụng khi thao tác với Store
+        return $this->hasMany(Product::class);
+    } */
 }
