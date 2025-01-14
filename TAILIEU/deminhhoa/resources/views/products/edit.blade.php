@@ -27,7 +27,7 @@
                 </div>
                 <div class="form-group mt-3"> 
                     <label for="price">Giá sản phẩm</label> 
-                    <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" value="{{ $product->price }}"  required> 
+                    <input type="number" class="form-control" id="price" name="price" step="0.01" min="0"  value="{{ $product->price }}"  required> 
                 </div>
                 <div class="form-group mt-3"> 
                     <label for="difficulty">Cửa hàng</label> 

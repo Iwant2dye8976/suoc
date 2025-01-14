@@ -14,30 +14,29 @@
                      </ul>
                 </div>
             @endif
-            <form action="{{ route('products.update', $product->id) }}" method="POST"> 
+            <form action="{{ route('products.store') }}" method="post"> 
                 @csrf 
-                @method('PUT')
                 <div class="form-group"> 
                     <label for="name">Tên sản phẩm</label> 
-                    <input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}" required> 
+                    <input type="text" class="form-control" id="name" name="name" required> 
                 </div> 
                 <div class="form-group mt-3"> 
                     <label for="description">Mô tả sản phẩm</label> 
-                    <textarea class="form-control" name="description" id="description">{{ $product->description }}</textarea>
+                    <textarea class="form-control" name="description" id="description"></textarea>
                 </div>
                 <div class="form-group mt-3"> 
                     <label for="price">Giá sản phẩm</label> 
-                    <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" value="{{ $product->price }}"  required> 
+                    <input type="number" class="form-control" id="price" name="price" step="0.01" min="0" required> 
                 </div>
                 <div class="form-group mt-3"> 
                     <label for="difficulty">Cửa hàng</label> 
                     <select class="form-control" name="store_id" id="store_id">
                         @foreach($stores as $store)
-                            <option value="{{ $store->id }}" {{ $product->store_id == $store->id ? 'selected' : ''}}> {{ $store->name }} </option>
+                            <option value="{{ $store->id }}"> {{ $store->name }} </option>
                         @endforeach
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Cập nhật sản phẩm</button> 
+                <button type="submit" class="btn btn-primary mt-3">Thêm sản phẩm</button> 
             </form> 
         </div> 
     </div> 
